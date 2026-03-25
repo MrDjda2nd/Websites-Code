@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gn-math</title>
+    <meta name="description" content="Play unblocked games like Crazy Cattle 3D and DriveMad on GN-Math. Fast, free, no downloads-perfect for school or home." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #242424;
+        --bg-card: #2a2a2a;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --accent: #f14668;
+        --accent-hover: #ff6b8a;
+        --border-color: #3a3a3a;
+        --input-bg: #1a1a1a;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        line-height: 1.5;
+      }
+
+      .header {
+        background-color: var(--accent);
+        padding: 0 24px;
+        height: 60px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-decoration: none;
+        letter-spacing: -0.5px;
+      }
+
+      .logo:hover {
+        opacity: 0.9;
+      }
+
+      .search-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        justify-content: center;
+        max-width: 500px;
+      }
+
+      .search-input {
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        color: var(--text-primary);
+        width: 200px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .search-input::placeholder {
+        color: var(--text-secondary);
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--text-primary);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+      }
+
+      .sort-select {
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 32px 8px 12px;
+        font-size: 14px;
+        color: var(--text-primary);
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+      }
+
+      .sort-select:focus {
+        outline: none;
+        border-color: var(--text-primary);
+      }
+
+      .settings-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .settings-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .zones-section {
+        margin-bottom: 32px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 8px 0;
+        margin-bottom: 16px;
+      }
+
+      .toggle-icon {
+        font-size: 12px;
+        transition: transform 0.2s;
+      }
+
+      .section-header.collapsed .toggle-icon {
+        transform: rotate(-90deg);
+      }
+
+      .section-title {
+        color: var(--text-primary);
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 16px;
+      }
+
+      .games-grid.hidden {
+        display: none;
+      }
+
+      .game-card {
+        background-color: var(--bg-card);
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+
+      .game-card-image {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        background-color: var(--bg-secondary);
+      }
+
+      .game-card-title {
+        padding: 12px;
+        font-size: 13px;
+        font-weight: 500;
+        text-align: center;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal {
+        background-color: var(--bg-secondary);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        margin: 16px;
+        overflow: hidden;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .modal-header h2 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+      }
+
+      .close-btn:hover {
+        color: var(--text-primary);
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+
+      .setting-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+      }
+
+      .setting-item:not(:last-child) {
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .setting-item label {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .setting-item select {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 14px;
+        color: var(--text-primary);
+        cursor: pointer;
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          padding: 0 16px;
+        }
+
+        .header-content {
+          flex-wrap: wrap;
+          height: auto;
+          padding: 12px 0;
+          gap: 12px;
+        }
+
+        .search-controls {
+          order: 3;
+          width: 100%;
+          max-width: none;
+        }
+
+        .search-input {
+          flex: 1;
+          width: auto;
+        }
+
+        .main {
+          padding: 16px;
+        }
+
+        .games-grid {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: 12px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .games-grid {
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          gap: 8px;
+        }
+
+        .game-card-title {
+          padding: 8px;
+          font-size: 12px;
+        }
+      }
+
+      .games-grid.small {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+
+      .games-grid.large {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <a href="/" class="logo">gn-math</a>
+        <div class="search-controls">
+          <input type="text" class="search-input" placeholder="Search zones..." id="searchInput" />
+          <select class="sort-select" id="sortSelect">
+            <option value="name">Name</option>
+            <option value="recent">Recent</option>
+            <option value="popular">Popular</option>
+          </select>
+        </div>
+        <button class="settings-btn" id="settingsBtn">Settings</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="zones-section">
+        <button class="section-header" id="toggleFeatured">
+          <span class="toggle-icon">▼</span>
+          <span class="section-title">Featured Zones (<span id="zoneCount">33</span>)</span>
+        </button>
+        <div class="games-grid" id="gamesGrid"></div>
+      </section>
+    </main>
+
+    <div class="modal-overlay" id="settingsModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <button class="close-btn" id="closeSettings">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-item">
+            <label for="themeSelect">Theme</label>
+            <select id="themeSelect">
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label for="gridSize">Grid Size</label>
+            <select id="gridSize">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const games = [
+        { id: '1', title: '[!] SUGGEST GAMES', image: 'https://cdn.discordapp.com/embed/avatars/0.png' },
+        { id: '2', title: "A Bite at Freddy's", image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop' },
+        { id: '3', title: 'Bad Parenting 1', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200&h=200&fit=crop' },
+        { id: '4', title: 'Bendy and the Ink Machine', image: 'https://images.unsplash.com/photo-1493711662062-fa541f7f76b7?w=200&h=200&fit=crop' },
+        { id: '5', title: 'BFDI: Branches', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop' },
+        { id: '6', title: 'Bowmasters', image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=200&h=200&fit=crop' },
+        { id: '7', title: 'Buckshot Roulette', image: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=200&h=200&fit=crop' },
+        { id: '8', title: 'Chat Bot (A.I.)', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200&h=200&fit=crop' },
+        { id: '9', title: "Class of '09", image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=200&h=200&fit=crop' },
+        { id: '10', title: 'Crazy Cars', image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=200&h=200&fit=crop' },
+        { id: '11', title: 'Crazy Cattle 3D', image: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=200&h=200&fit=crop' },
+        { id: '12', title: 'Deltarune', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&h=200&fit=crop' },
+        { id: '13', title: 'Do NOT Take This Cat Home', image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200&h=200&fit=crop' },
+        { id: '14', title: 'Doki Doki Literature Club', image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop' },
+        { id: '15', title: "DON'T YOU LECTURE ME", image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&h=200&fit=crop' },
+        { id: '16', title: 'Endoparasitic', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200&h=200&fit=crop' },
+        { id: '17', title: 'Half Life', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop' },
+        { id: '18', title: 'Hotline Miami', image: 'https://images.unsplash.com/photo-1579546929662-711aa81148cf?w=200&h=200&fit=crop' },
+        { id: '19', title: 'Minecraft 1.12.2', image: 'https://images.unsplash.com/photo-1587573089734-599d584150c5?w=200&h=200&fit=crop' },
+        { id: '20', title: 'OMORI', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200&h=200&fit=crop' },
+        { id: '21', title: 'People Playground', image: 'https://images.unsplash.com/photo-1577741314755-048d8525d31e?w=200&h=200&fit=crop' },
+        { id: '22', title: 'Pizza Tower', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop' },
+        { id: '23', title: 'Quake III Arena', image: 'https://images.unsplash.com/photo-1614294148960-9aa740632a87?w=200&h=200&fit=crop' },
+        { id: '24', title: 'R.E.P.O', image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&h=200&fit=crop' },
+        { id: '25', title: 'RE:RUN', image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&h=200&fit=crop' },
+        { id: '26', title: 'Soundboard', image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=200&h=200&fit=crop' },
+        { id: '27', title: 'Space Waves', image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=200&h=200&fit=crop' },
+        { id: '28', title: 'Speed Stars', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop' },
+        { id: '29', title: "That's Not My Neighbor", image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&h=200&fit=crop' },
+        { id: '30', title: 'ULTRAKILL', image: 'https://images.unsplash.com/photo-1511882150382-421056c89033?w=200&h=200&fit=crop' },
+        { id: '31', title: 'Undertale', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop' },
+        { id: '32', title: 'WebFishing', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=200&h=200&fit=crop' },
+        { id: '33', title: 'Yume Nikki', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200&h=200&fit=crop' },
+      ];
+
+      const gamesGrid = document.getElementById('gamesGrid');
+      const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      const settingsBtn = document.getElementById('settingsBtn');
+      const settingsModal = document.getElementById('settingsModal');
+      const closeSettings = document.getElementById('closeSettings');
+      const toggleFeatured = document.getElementById('toggleFeatured');
+      const zoneCount = document.getElementById('zoneCount');
+      const gridSizeSelect = document.getElementById('gridSize');
+
+      let currentGames = [...games];
+
+      function renderGames(gamesToRender) {
+        gamesGrid.innerHTML = gamesToRender.map(game => `
+          <div class="game-card" data-id="${game.id}">
+            <img class="game-card-image" src="${game.image}" alt="${game.title}" onerror="this.style.background='#2a2a2a'" />
+            <div class="game-card-title">${game.title}</div>
+          </div>
+        `).join('');
+        zoneCount.textContent = gamesToRender.length;
+      }
+
+      function filterGames(query) {
+        const filtered = games.filter(game => game.title.toLowerCase().includes(query.toLowerCase()));
+        sortGames(filtered);
+      }
+
+      function sortGames(gamesToSort = currentGames) {
+        const sortBy = sortSelect.value;
+        const sorted = [...gamesToSort];
+        switch (sortBy) {
+          case 'name': sorted.sort((a, b) => a.title.localeCompare(b.title)); break;
+          case 'recent': sorted.reverse(); break;
+          case 'popular': sorted.sort(() => Math.random() - 0.5); break;
+        }
+        currentGames = sorted;
+        renderGames(sorted);
+      }
+
+      searchInput.addEventListener('input', e => filterGames(e.target.value));
+      sortSelect.addEventListener('change', () => filterGames(searchInput.value));
+      settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
+      closeSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
+      settingsModal.addEventListener('click', e => { if (e.target === settingsModal) settingsModal.classList.remove('active'); });
+      toggleFeatured.addEventListener('click', () => { toggleFeatured.classList.toggle('collapsed'); gamesGrid.classList.toggle('hidden'); });
+      gridSizeSelect.addEventListener('change', () => { gamesGrid.classList.remove('small', 'medium', 'large'); gamesGrid.classList.add(gridSizeSelect.value); });
+      gamesGrid.addEventListener('click', e => {
+        const card = e.target.closest('.game-card');
+        if (card) {
+          const game = games.find(g => g.id === card.dataset.id);
+          if (game) alert(`Loading: ${game.title}\n\n(This is a demo clone)`);
+        }
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') settingsModal.classList.remove('active');
+        if (e.key === '/' && document.activeElement !== searchInput) { e.preventDefault(); searchInput.focus(); }
+      });
+
+      renderGames(games);
+    </script>
+  </body>
+</html>
