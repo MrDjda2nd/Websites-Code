@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GALAXY V6 - Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'GalaxyFont';
+      src: url('https://ext.same-assets.com/3551615183/775819213.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --galaxy-blue: #7291b5;
+      --galaxy-blue-light: #8fa8c9;
+      --galaxy-blue-dark: #5a7499;
+      --bg-dark: #04050a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'GalaxyFont', 'Rajdhani', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--galaxy-blue);
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    /* Aurora background effect */
+    .aurora-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .aurora-gradient {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: 50%;
+      left: -50%;
+      background: radial-gradient(ellipse at center, rgba(114, 145, 181, 0.15) 0%, transparent 50%);
+      transform: translateY(-50%) rotate(-15deg);
+      animation: aurora 15s ease-in-out infinite alternate;
+    }
+
+    .aurora-gradient-2 {
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      top: 60%;
+      left: -25%;
+      background: radial-gradient(ellipse at center, rgba(55, 74, 98, 0.2) 0%, transparent 45%);
+      transform: translateY(-50%) rotate(-10deg);
+      animation: aurora2 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes aurora {
+      0% {
+        transform: translateY(-50%) rotate(-15deg) translateX(0);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-50%) rotate(-12deg) translateX(-5%);
+        opacity: 1;
+      }
+    }
+
+    @keyframes aurora2 {
+      0% {
+        transform: translateY(-50%) rotate(-10deg) translateX(0);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-50%) rotate(-8deg) translateX(3%);
+        opacity: 0.9;
+      }
+    }
+
+    /* Main container */
+    .container {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Screens */
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Welcome screen */
+    .welcome-screen {
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: clamp(3rem, 10vw, 8rem);
+      font-weight: 300;
+      letter-spacing: 0.5em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .galaxy-letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeSlideIn 0.8s ease-out forwards;
+    }
+
+    .version-letter {
+      opacity: 0.7;
+      margin-left: 0.5em;
+    }
+
+    @keyframes fadeSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cta-text {
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+      animation-delay: 1.2s;
+      margin-bottom: 4rem;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 0.8;
+      }
+    }
+
+    .mini-text {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(114, 145, 181, 0.4);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    .mini-text kbd {
+      background: rgba(114, 145, 181, 0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    /* Question screens */
+    .question {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      letter-spacing: 0.1em;
+      margin-bottom: 3rem;
+      opacity: 0.9;
+    }
+
+    .galaxy-input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--galaxy-blue);
+      color: var(--galaxy-blue);
+      font-family: 'GalaxyFont', 'Rajdhani', sans-serif;
+      font-size: 1.5rem;
+      padding: 0.5rem 0;
+      outline: none;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      transition: border-color 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .galaxy-input::placeholder {
+      color: rgba(114, 145, 181, 0.5);
+    }
+
+    .galaxy-input:focus {
+      border-color: var(--galaxy-blue-light);
+    }
+
+    .galaxy-button {
+      background: transparent;
+      border: 1px solid var(--galaxy-blue);
+      color: var(--galaxy-blue);
+      font-family: 'GalaxyFont', 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .galaxy-button:hover {
+      background: var(--galaxy-blue);
+      color: var(--bg-dark);
+    }
+
+    .galaxy-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Background selection */
+    .bg-subtitle {
+      font-size: 0.875rem;
+      opacity: 0.5;
+      margin-bottom: 3rem;
+      letter-spacing: 0.1em;
+    }
+
+    .bg-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .bg-card {
+      width: 200px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .bg-card:hover {
+      border-color: var(--galaxy-blue);
+      transform: scale(1.05);
+    }
+
+    .bg-card.selected {
+      border-color: var(--galaxy-blue);
+      box-shadow: 0 0 20px rgba(114, 145, 181, 0.4);
+    }
+
+    .bg-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(114, 145, 181, 0.1);
+    }
+
+    .upload-card img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      opacity: 0.6;
+    }
+
+    .upload-card input {
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title {
+        letter-spacing: 0.3em;
+      }
+
+      .bg-card {
+        width: 150px;
+        height: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Aurora Background -->
+  <div class="aurora-bg">
+    <div class="aurora-gradient"></div>
+    <div class="aurora-gradient-2"></div>
+  </div>
+
+  <div class="container">
+    <!-- Welcome Screen -->
+    <div class="screen welcome-screen active" id="welcomeScreen">
+      <h1 class="title">
+        <span class="galaxy-letter" style="animation-delay: 0s;">G</span>
+        <span class="galaxy-letter" style="animation-delay: 0.1s;">A</span>
+        <span class="galaxy-letter" style="animation-delay: 0.2s;">L</span>
+        <span class="galaxy-letter" style="animation-delay: 0.3s;">A</span>
+        <span class="galaxy-letter" style="animation-delay: 0.4s;">X</span>
+        <span class="galaxy-letter" style="animation-delay: 0.5s;">Y</span>
+        <span class="galaxy-letter version-letter" style="animation-delay: 0.6s;">V</span>
+        <span class="galaxy-letter version-letter" style="animation-delay: 0.7s;">6</span>
+      </h1>
+      <p class="cta-text">Click to get started</p>
+      <p class="mini-text">hold <kbd><b>Alt</b></kbd> to skip</p>
+    </div>
+
+    <!-- Name Screen -->
+    <div class="screen" id="nameScreen">
+      <h2 class="question">What's your name?</h2>
+      <input type="text" class="galaxy-input" id="nameInput" placeholder="Enter your name">
+      <button class="galaxy-button" id="nameButton" disabled>Continue</button>
+    </div>
+
+    <!-- Background Screen -->
+    <div class="screen" id="bgScreen">
+      <h2 class="question">Choose a Background</h2>
+      <p class="bg-subtitle">(More in settings)</p>
+      <div class="bg-options">
+        <div class="bg-card" data-bg="bg1">
+          <img src="https://ext.same-assets.com/3551615183/1339575164.png" alt="Background 1">
+        </div>
+        <div class="bg-card" data-bg="bg2">
+          <img src="https://ext.same-assets.com/3551615183/2894838363.jpeg" alt="Background 2">
+        </div>
+        <label class="bg-card upload-card" data-bg="custom">
+          <input type="file" accept="image/*" id="fileInput">
+          <img src="https://ext.same-assets.com/3551615183/2768179007.png" alt="Upload" id="uploadIcon">
+        </label>
+      </div>
+      <button class="galaxy-button" id="bgButton">Continue</button>
+    </div>
+
+    <!-- Complete Screen -->
+    <div class="screen" id="completeScreen">
+      <h2 class="question">You're All Set!</h2>
+      <button class="galaxy-button" id="completeButton">Next</button>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentScreen = 'welcome';
+    let userName = '';
+    let selectedBg = null;
+
+    // Elements
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const nameScreen = document.getElementById('nameScreen');
+    const bgScreen = document.getElementById('bgScreen');
+    const completeScreen = document.getElementById('completeScreen');
+    const nameInput = document.getElementById('nameInput');
+    const nameButton = document.getElementById('nameButton');
+    const bgCards = document.querySelectorAll('.bg-card');
+    const bgButton = document.getElementById('bgButton');
+    const completeButton = document.getElementById('completeButton');
+    const fileInput = document.getElementById('fileInput');
+    const uploadIcon = document.getElementById('uploadIcon');
+
+    // Screen transition function
+    function goToScreen(screenName) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show target screen
+      setTimeout(() => {
+        const targetScreen = document.getElementById(screenName + 'Screen');
+        if (targetScreen) {
+          targetScreen.classList.add('active');
+          currentScreen = screenName;
+
+          // Focus input if on name screen
+          if (screenName === 'name') {
+            nameInput.focus();
+          }
+        }
+      }, 300);
+    }
+
+    // Welcome screen click
+    welcomeScreen.addEventListener('click', () => {
+      goToScreen('name');
+    });
+
+    // Name input handling
+    nameInput.addEventListener('input', (e) => {
+      userName = e.target.value.trim();
+      nameButton.disabled = !userName;
+    });
+
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && userName) {
+        goToScreen('bg');
+      }
+    });
+
+    nameButton.addEventListener('click', () => {
+      if (userName) {
+        goToScreen('bg');
+      }
+    });
+
+    // Background selection
+    bgCards.forEach(card => {
+      card.addEventListener('click', () => {
+        bgCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedBg = card.dataset.bg;
+      });
+    });
+
+    // File upload
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          uploadIcon.src = event.target.result;
+          uploadIcon.style.width = '100%';
+          uploadIcon.style.height = '100%';
+          uploadIcon.style.objectFit = 'cover';
+          uploadIcon.style.opacity = '1';
+          bgCards.forEach(c => c.classList.remove('selected'));
+          uploadIcon.parentElement.classList.add('selected');
+          selectedBg = 'custom';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    bgButton.addEventListener('click', () => {
+      goToScreen('complete');
+    });
+
+    // Complete button
+    completeButton.addEventListener('click', () => {
+      alert(`Welcome ${userName || 'User'}! Your onboarding is complete.`);
+    });
+
+    // Alt key to skip
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && currentScreen === 'welcome') {
+        goToScreen('complete');
+      }
+    });
+  </script>
+</body>
+</html>
